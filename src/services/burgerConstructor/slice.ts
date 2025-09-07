@@ -20,11 +20,17 @@ export const BurgerConstructorSlice = createSlice({
     getBurgerIngredients: (state) => state.ingredients
   },
   reducers: {
-    addIngredient: (state, action: PayloadAction<TConstructorIngredient>) => {
-      if (action.payload.type === 'bun') {
-        state.bun = action.payload;
-      } else {
-        state.ingredients.push(action.payload);
+    addIngredient: {
+      reducer: (state, action: PayloadAction<TConstructorIngredient>) => {
+        if (action.payload.type === 'bun') {
+          state.bun = action.payload;
+        } else {
+          state.ingredients.push(action.payload);
+        }
+      },
+      prepare: (ingredient: TIngredient) => {
+        const id = String(Math.random());
+        return { payload: { ...ingredient, id } };
       }
     },
     removeIngredient: (state, action: PayloadAction<string>) => {
@@ -41,9 +47,24 @@ export const BurgerConstructorSlice = createSlice({
       action: PayloadAction<{ fromIndex: number; toIndex: number }>
     ) => {
       const { fromIndex, toIndex } = action.payload;
+
+      if (
+        fromIndex < 0 ||
+        fromIndex >= state.ingredients.length ||
+        toIndex < 0 ||
+        toIndex >= state.ingredients.length ||
+        fromIndex === toIndex
+      ) {
+        return;
+      }
+
       const newIngredients = [...state.ingredients];
-      const [movedItem] = newIngredients.splice(fromIndex, 1);
-      newIngredients.splice(toIndex, 0, movedItem);
+
+      [newIngredients[fromIndex], newIngredients[toIndex]] = [
+        newIngredients[toIndex],
+        newIngredients[fromIndex]
+      ];
+
       state.ingredients = newIngredients;
     }
   }

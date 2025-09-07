@@ -12,8 +12,8 @@ export const Feed: FC = () => {
     dispatch(FeedInfoAction());
   }, [dispatch]);
 
-  const orders: TOrder[] = useSelector(getAllOrders);
-  const isLoading: boolean = useSelector(getIsLoading);
+  const orders = useSelector(getAllOrders);
+  const isLoading = useSelector(getIsLoading);
 
   if (!orders.length || isLoading) {
     return <Preloader />;

@@ -29,6 +29,7 @@ export const ResetPasswordUI: FC<ResetPasswordUIProps> = ({
             onChange={(e) => setPassword(e.target.value)}
             value={password}
             name='password'
+            autoComplete='new-password'
           />
         </div>
         <div className='pb-6'>
@@ -41,6 +42,7 @@ export const ResetPasswordUI: FC<ResetPasswordUIProps> = ({
             error={false}
             errorText=''
             size='default'
+            autoComplete='one-time-code'
           />
         </div>
         <div className={`pb-6 ${styles.button}`}>
