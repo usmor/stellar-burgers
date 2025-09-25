@@ -1,15 +1,12 @@
 import { expect, test, describe } from '@jest/globals';
-import { burgerIngredientsSlice } from '../services/burgerIngredients/slice';
+import {
+  burgerIngredientsSlice,
+  initialState as initialBurgerState
+} from '../services/burgerIngredients/slice';
 import mockIngredients from '../utils/mocks/mockIngredients.json';
 import { IngredientsAction } from '../services/burgerIngredients/actions';
 
 describe('тест burgerIngredientsSlice', () => {
-  const initialBurgerState = {
-    ingredients: null,
-    isLoading: false,
-    error: null
-  };
-
   describe('тесты получения ингредиентов', () => {
     test('успешный запрос IgredientsAction', () => {
       const action = {

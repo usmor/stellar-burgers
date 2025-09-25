@@ -1,14 +1,12 @@
 import { expect, test, describe } from '@jest/globals';
 import { createOrder } from '../services/newOrder/actions';
-import { orderSlice } from '../services/newOrder/slice';
+import {
+  orderSlice,
+  initialState as initialNewOrderState
+} from '../services/newOrder/slice';
 import mockOrder from '../utils/mocks/mockOrder.json';
 
 describe('тест orderSlice', () => {
-  const initialNewOrderState = {
-    currentOrder: null,
-    isLoading: false,
-    error: null
-  };
   describe('тесты создания заказа', () => {
     test('успешный запрос createOrder', () => {
       const action = {

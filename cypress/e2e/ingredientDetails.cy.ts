@@ -1,4 +1,13 @@
 describe('Тестирование функциональности модальных окон', () => {
+  const modal_selector = '[data-testid="modal"]';
+
+  const ingredient_selector = '[data-testid="ingredient-643d69a5c3f7b9001cfa093c"]';
+  const ingredient_name = 'Краторная булка N-200i';
+  const calories_text = 'Калории, ккал';
+  const proteins_text = 'Белки, г';
+  const fat_text = 'Жиры, г';
+  const carbohydrates_text = 'Углеводы, г';
+
   beforeEach(() => {
     cy.intercept('GET', 'api/ingredients', { fixture: 'ingredients.json' }).as(
       'getIngredients'
@@ -8,36 +17,26 @@ describe('Тестирование функциональности модаль
   });
 
   it('открытие модального окна ингредиента', () => {
-    cy.get('[data-testid="ingredient-643d69a5c3f7b9001cfa093c"]')
-      .click();
+    cy.openIngredientModal(ingredient_selector)
 
-    cy.get('[data-testid="modal"]').should('exist');
-
-    cy.get('[data-testid="modal"]')
-      .should('contain.text', 'Краторная булка N-200i')
-      .should('contain.text', 'Калории, ккал')
-      .and('contain.text', 'Белки, г')
-      .and('contain.text', 'Жиры, г')
-      .and('contain.text', 'Углеводы, г');
+    cy.get(modal_selector)
+      .should('exist')
+      .should('contain.text', ingredient_name)
+      .and('contain.text', calories_text)
+      .and('contain.text', proteins_text)
+      .and('contain.text', fat_text)
+      .and('contain.text', carbohydrates_text);
   });
 
   it('закрытие по крестику', () => {
-    cy.get('[data-testid="ingredient-643d69a5c3f7b9001cfa093c"]')
-      .click();
+    cy.openIngredientModal(ingredient_selector)
 
-    cy.get('[data-testid="close"]')
-      .click();
-
-    cy.get('[data-testid="modal"]').should('not.exist')
-  })
+    cy.closeModalByCross();
+  });
 
   it('закрытие по оверлею', () => {
-    cy.get('[data-testid="ingredient-643d69a5c3f7b9001cfa093c"]')
-      .click();
+    cy.openIngredientModal(ingredient_selector)
 
-    cy.get('[data-testid="modal-overlay"]')
-    .click({ force: true });
-
-    cy.get('[data-testid="modal-overlay"]').should('not.exist')
-  })
+    cy.closeModalByOverlay()
+  });
 });

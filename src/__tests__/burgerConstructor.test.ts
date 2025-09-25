@@ -1,6 +1,7 @@
 import { expect, test, describe } from '@jest/globals';
 import {
   BurgerConstructorSlice,
+  initialState as initialBurgerConstructorState,
   addIngredient,
   removeIngredient,
   moveIngredient
@@ -52,11 +53,6 @@ describe('тесты синхронных экшенов BurgerConstructor', () 
   };
 
   describe('тесты на добавление ингредиентов ', () => {
-    const initialBurgerConstructorState = {
-      bun: null,
-      ingredients: []
-    };
-
     test('добавление булочки', () => {
       const newState = BurgerConstructorSlice.reducer(
         initialBurgerConstructorState,

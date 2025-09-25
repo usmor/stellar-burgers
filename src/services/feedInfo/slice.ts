@@ -9,7 +9,7 @@ type TFeedState = TOrdersData & {
   currentOrderError: string | null;
 };
 
-const initialState: TFeedState = {
+export const initialState: TFeedState = {
   total: 0,
   totalToday: 0,
   orders: [],

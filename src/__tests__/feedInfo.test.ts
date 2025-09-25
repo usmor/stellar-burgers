@@ -3,22 +3,15 @@ import {
   FeedInfoAction,
   OrderByNumberAction
 } from '../services/feedInfo/actions';
-import { feedSlice } from '../services/feedInfo/slice';
+import {
+  feedSlice,
+  initialState as intialFeedState
+} from '../services/feedInfo/slice';
 import mockFeedInfo from '../utils/mocks/mockFeedInfo.json';
 import mockOrder from '../utils/mocks/mockOrder.json';
 import mockOrders from '../utils/mocks/mockOrders.json';
 
 describe('тест feedSlice', () => {
-  const intialFeedState = {
-    total: 0,
-    totalToday: 0,
-    orders: [],
-    isLoading: false,
-    currentOrder: null,
-    error: null,
-    currentOrderError: null
-  };
-
   describe('тесты получения данных ленты заказов', () => {
     test('успешное выполнение запроса FeedInfoAction', () => {
       const action = {

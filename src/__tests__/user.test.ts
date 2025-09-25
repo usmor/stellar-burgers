@@ -1,5 +1,8 @@
 import { expect, test, describe } from '@jest/globals';
-import { userSlice } from '../services/user/slice';
+import {
+  userSlice,
+  initialState as initialUserState
+} from '../services/user/slice';
 import {
   loginUser,
   registerUser,
@@ -14,14 +17,6 @@ import mockUser from '../utils/mocks/mockUser.json';
 import mockOrders from '../utils/mocks/mockOrders.json';
 
 describe('тест userSlice', () => {
-  const initialUserState = {
-    user: null,
-    isAuthChecked: false,
-    isLoading: false,
-    userOrders: [],
-    error: null
-  };
-
   describe('логин пользователя', () => {
     test('запрос в процессе выполнения', () => {
       const action = { type: loginUser.pending.type };

@@ -1,84 +1,72 @@
+import { INGREDIENTS } from "../support/commands";
+
 describe('Constructor Page тестирование', () => {
+  const ingredient_selector = '[data-testid^="ingredient-"]';
+
+
   beforeEach(() => {
     cy.intercept('GET', 'api/ingredients', { fixture: 'ingredients.json' }).as(
       'getIngredients'
     );
 
     cy.visit('/');
-
     cy.wait('@getIngredients');
   });
 
   it('Проверка загрузки ингредиентов', () => {
     cy.get('h1').should('have.text', 'Соберите бургер');
-    cy.get('[data-testid^="ingredient-"]').should('have.length.at.least', 1);
+    cy.get(ingredient_selector).should('have.length.at.least', 1);
   });
 
   describe('Добавление ингредиентов в конструктор', () => {
     it('добавление булки', () => {
-      cy.get('[data-testid="ingredient-643d69a5c3f7b9001cfa093c"]')
-        .contains('Добавить')
-        .click();
+      cy.addIngredient('bun');
 
-      cy.get('.constructor-element_pos_top')
-        .find('.constructor-element__text')
-        .should('have.text', 'Краторная булка N-200i (верх)');
-
-      cy.get('.constructor-element_pos_bottom')
-        .find('.constructor-element__text')
-        .should('have.text', 'Краторная булка N-200i (низ)');
+      const bunText = INGREDIENTS.bun.text;
+      if (typeof bunText !== 'string' && 'top' in bunText && 'bottom' in bunText) {
+        cy.checkIngredient(bunText.top!);
+        cy.checkIngredient(bunText.bottom!);
+      }
     });
 
     it('добавление начинки', () => {
-      cy.get('[data-testid="ingredient-643d69a5c3f7b9001cfa0941"]')
-        .contains('Добавить')
-        .click();
+      cy.addIngredient('main');
 
-      cy.get('.constructor-element')
-        .find('.constructor-element__text')
-        .should('have.text', 'Биокотлета из марсианской Магнолии');
+      const mainText = INGREDIENTS.main.text;
+      if (typeof mainText === 'string') {
+        cy.checkIngredient(mainText);
+      }
     });
 
     it('добавление соуса', () => {
-      cy.get('[data-testid="ingredient-643d69a5c3f7b9001cfa0942"]')
-        .contains('Добавить')
-        .click();
+      cy.addIngredient('sauce');
 
-      cy.get('.constructor-element')
-        .find('.constructor-element__text')
-        .should('have.text', 'Соус Spicy-X');
+      const sauceText = INGREDIENTS.sauce.text;
+      if (typeof sauceText === 'string') {
+        cy.checkIngredient(sauceText);
+      }
     });
 
     it('добавление нескольких ингредиентов', () => {
-      cy.get('[data-testid="ingredient-643d69a5c3f7b9001cfa093c"]')
-        .contains('Добавить')
-        .click();
+      cy.addIngredient('bun');
 
-      cy.get('[data-testid="ingredient-643d69a5c3f7b9001cfa0941"]')
-        .contains('Добавить')
-        .click()
-        .click();
+      const bunText = INGREDIENTS.bun.text;
+      if (typeof bunText !== 'string' && 'top' in bunText && 'bottom' in bunText) {
+        cy.checkIngredient(bunText.top!);
+        cy.checkIngredient(bunText.bottom!);
+      }
 
-      cy.get('[data-testid="ingredient-643d69a5c3f7b9001cfa0942"]')
-        .contains('Добавить')
-        .click();
+      cy.addIngredient('main', 2);
+      const mainText = INGREDIENTS.main.text;
+      if (typeof mainText === 'string') {
+        cy.checkIngredient(mainText, 2);
+      }
 
-      cy.get('.constructor-element__text')
-        .should('have.length', 5)
-        .then(($texts) => {
-          const allTexts = $texts.map((_, el) => Cypress.$(el).text()).get();
-
-          expect(allTexts).to.include('Краторная булка N-200i (верх)');
-          expect(allTexts).to.include('Краторная булка N-200i (низ)');
-
-          const main = allTexts.filter(
-            (t) => t === 'Биокотлета из марсианской Магнолии'
-          ).length;
-          expect(main).to.eq(2);
-
-          const sauce = allTexts.filter((t) => t === 'Соус Spicy-X').length;
-          expect(sauce).to.eq(1);
-        });
+      cy.addIngredient('sauce');
+      const sauceText = INGREDIENTS.sauce.text;
+      if (typeof sauceText === 'string') {
+        cy.checkIngredient(sauceText);
+      }
     });
   });
 });
